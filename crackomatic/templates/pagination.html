@@ -1,0 +1,23 @@
+{%- if pagination.needed -%}
+<nav class="pagination is-right" role="navigation" aria-label="pagination">
+  <ul class="pagination-list">
+    {%- for link in pagination.links -%}
+      {%- if link -%}
+        <li>
+            <a class="pagination-link{%- if pagination.page == link['page'] %} is-current{%- endif -%}"
+               aria-label="{%- if pagination.page == link['page'] -%}Page{%- else -%}Goto page{%- endif -%} {{link['page']}}"
+               href="{{link['href']}}">
+                {{link['page']}}
+            </a>
+        </li>
+      {%- else -%}
+        <li><span class="pagination-ellipsis">&hellip;</span></li>
+      {%- endif -%}
+    {%- endfor -%}
+    <a class="button is-link pagination-previous" {% if not pagination.previous -%}disabled{%- endif %}
+       href="{{pagination.previous}}">Previous</a>
+  <a class="button is-link pagination-next" {% if not pagination.next -%}disabled{%- endif %}
+      href="{{pagination.next}}">Next page</a>
+  </ul>
+</nav>
+{%- endif -%}

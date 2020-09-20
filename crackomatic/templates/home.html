@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='crackomatic.css') }}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <section class="hero is-info welcome is-small">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title"> Hello, {{user}}.  </h1>
+                    <h2 class="subtitle"> Let's get cracking.  </h2>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <div class="container">
+                {% for section in sections %}
+                    <h1 class="title">{{section['title']}}</h1>
+                    {% if 'tiles' in section %}
+                    <section class="info-tiles">
+                        <div class="tile is-ancestor has-text-centered">
+                            {% for t in section['tiles'] %}
+                            <div class="tile is-parent{% if 'rumble' in t %} rumble{% endif %}">
+                                <article class="tile is-child box">
+                                    <p class="title{% if 'color' in t %} has-text-{{t['color']}}{% endif %}">{{t['title']}}</p>
+                                    <p class="subtitle">{{t['subtitle']}}</p>
+                                </article>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+{% endblock %}

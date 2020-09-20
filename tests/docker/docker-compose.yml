@@ -1,0 +1,42 @@
+version: '2'
+networks:
+  extnet:
+    external: true
+services:
+  dc:
+    image: "nowsci/samba-domain"
+    hostname: localdc
+    environment:
+      - DOMAIN=crack.local
+      - DOMAINPASS=zVaqMYJfu8XZLC5
+      - HOSTIP=172.17.0.1
+    networks:
+      - extnet
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /data/docker/containers/samba/data/:/var/lib/samba
+      - /data/docker/containers/samba/config/samba:/etc/samba/external
+    ports:
+      - "172.17.0.1:53:53"
+      - "172.17.0.1:53:53/udp"
+      - "172.17.0.1:88:88"
+      - "172.17.0.1:88:88/udp"
+      - "172.17.0.1:135:135"
+      #  - "172.17.0.1:137-138:137-138/udp"
+      - "172.17.0.1:139:139"
+      - "172.17.0.1:389:389"
+      - "172.17.0.1:389:389/udp"
+      - "172.17.0.1:445:445"
+      - "172.17.0.1:464:464"
+      - "172.17.0.1:464:464/udp"
+      - "172.17.0.1:636:636"
+      - "172.17.0.1:1024-1044:1024-1044"
+      - "172.17.0.1:3268-3269:3268-3269"
+    extra_hosts:
+      - localdc.crack.local:172.17.0.1
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    privileged: true
+    restart: always

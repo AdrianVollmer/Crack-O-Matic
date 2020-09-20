@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Events{% endblock %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='crackomatic.css') }}">
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Events</h1>
+          <nav class="level">
+          <div class="level-left">
+          </div>
+          <div class="level-right">
+            <a class="button level-item is-primary" href="?flat">Flat view</a>
+            </div>
+          </nav>
+        {% for entry in events %}
+          <div class="card">
+            <nav class="level columns is-vcentered has-text-centered"
+                style="margin: 0pt">
+              <div class="level-item column is-1">
+                  {{entry['level']}}
+              </div>
+               <div class="level-item column is-2">
+                  {{entry['created_at']}}
+              </div>
+               <div class="level-item column is-8">
+                  {{entry['msg']}}
+              </div>
+               <div class="level-item column is-1">
+                  {%-if entry['trace']-%}
+                  <a href="#collapsible-card-{{entry['id']}}"
+                     data-target="#collapsible-card-{{entry['id']}}"
+                     data-action="collapse"
+                     aria-label="Details">
+                      ...
+                  </a>
+                  {%-endif-%}
+              </div>
+            </nav>
+            {%-if entry['trace']-%}
+            <div id="collapsible-card-{{entry['id']}}" class="is-collapsible">
+                <div class="card-content">
+                    <pre>{{entry['trace']}}</pre>
+                </div>
+            </div>
+            {%-endif-%}
+          </div>
+        {% endfor %}
+        {% include 'pagination.html' %}
+      </div>
+    </section>
+  </div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Config{% endblock %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='crackomatic.css') }}">
+{% endblock %}
+
+{% import 'macros.jinja2' as macros %}
+
+{% block content %}
+    <div class="container">
+      <div class="columns">
+        <div class="column is-one-fifth">
+        <nav class="panel">
+            {% for s, title in sections %}
+                <a class="panel-block{% if section==s %} is-active{% endif %}"
+                   style="position: relative;"
+                   href="?section={{s}}">
+                    {{title}}
+                    {%- if errors[s] -%}
+                        <span class="badge is-right is-danger">{{errors[s]}}</span>
+                    {%- endif -%}
+                </a>
+            {% endfor %}
+        </nav>
+        </div>
+        <div class="column">
+            {%- with messages = get_flashed_messages(with_categories=true) -%}
+                {%- for category, message in messages -%}
+                    <div class="notification is-light is-{{category}}">{{message}}</div>
+                {%- endfor -%}
+            {%- endwith -%}
+            <form method="POST" action="/config">{{ macros.render_form(form) }}</form>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,100 @@
+{%- macro render_input(field) -%}
+  {%- if field.type == 'SelectField' %}
+    <div class="select">
+      {{field}}
+    </div>
+  {%- elif field.type == 'RadioField' -%}
+      {{field()}}
+  {%- elif field.type == 'BooleanField' -%}
+      {{field()}}
+  {%- elif field.type == 'TextAreaField' -%}
+      <textarea class="textarea"
+                name="{{field.name}}"
+                placeholder="{{field.description['placeholder']}}">{{field.data}}</textarea>
+  {% else %}
+      <input class="input{% if field.errors %} is-danger{% endif %}"
+             {% if field.type == 'StringField' %}type="text"{% endif %}
+             {% if field.type == 'PasswordField' %}type="password"{% endif %}
+             {% if field.type == 'IntegerField' %}type="number"{% endif %}
+             name="{{field.name}}"
+             value="{{field.data or ""}}"
+             placeholder="{{field.description['placeholder']}}">
+  {%- endif -%}
+{%- endmacro -%}
+
+
+{%- macro render_field(field) -%}
+    <div class="field">
+      {% if field.type != "BooleanField" %}
+          <label class="label">{{field.label}}</label>
+      {% endif %}
+      <div class="control">
+         {{ render_input(field) }}
+          {% if field.type == "BooleanField" %}
+              {{field.label}}
+          {% endif %}
+      </div>
+      {% for e in field.errors %}
+          <p class="help is-danger">{{e}}</p>
+      {% endfor %}
+      {% if 'help' in field.description %}
+          <p class="description">{{field.description['help']|safe}}</p>
+      {% endif %}
+    </div>
+{%- endmacro -%}
+
+
+{%- macro render_form(form) -%}
+  {{ form.csrf_token }}
+  {% for field in form %}
+    {% if field.type == 'HiddenField' or field.type == 'CSRFTokenField' %}
+        {{field}}
+    {% else %}
+        {{ render_field(field) }}
+    {% endif %}
+  {% endfor %}
+  <div class="field is-grouped">
+    <div class="control">
+      <input type="submit" class="button is-block is-info" value="Submit">
+    </div>
+  </div>
+{%- endmacro -%}
+
+
+{% macro audit(a) %}
+  <div class="card">
+    <nav class="level columns is-vcentered">
+      <div class="level-item column is-1 has-text-centered">
+        {{a.frequency.name}}
+      </div>
+      <div class="level-item column is-2 has-text-centered">
+        {{a.state.name}}
+      </div>
+      <div class="level-item column is-2 has-text-centered">
+        {{a.get('start')}}
+      </div>
+      <div class="level-item column is-2 has-text-centered">
+        {{a.end}}
+      </div>
+      <div class="level-item column is-1">
+        <a href="/audit?id={{a.uuid}}">Details</a>
+      </div>
+    </nav>
+  </div>
+{% endmacro %}
+
+
+{%- macro render_report_card(figure) -%}
+  <div class="columns">
+    <div class="column">
+      <div class="card" style='width: 100%'>
+        <div class="card-image has-text-centered"> {{figure['html']|safe}}
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <h2 class="title is-2">{{figure['title']}}</h2>
+      <p>{{figure['description']}}</p>
+    </div>
+  </div>
+{%- endmacro -%}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Report{% endblock %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='crackomatic.css') }}">
+{% endblock %}
+
+{% import 'macros.jinja2' as macros %}
+
+{% block content %}
+  <div class="container">
+    <section class="section">
+      <div class="container">
+        <h1 class="title is-1">Audit Report</h1>
+          <div class="content">
+              <p>
+              This is a report of the result of audit
+              <a href="/audit?id={{audit_id}}">{{audit_id}}</a>.
+              </p>
+          </div>
+          {% for figure in figures %}
+            {{ macros.render_report_card(figure) }}
+          {% endfor %}
+      </div>
+    </section>
+  </div>
+{% endblock %}

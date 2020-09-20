@@ -1,0 +1,13 @@
+doc/_build
+env
+venv
+.env
+.venv
+__pycache__
+*.pyc
+*.egg-info
+*.db
+.tox
+notes
+ignore/
+tests/data/openwall.net-all.txt

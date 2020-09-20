@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login.css') }}">
+{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+    <section class="hero is-success is-fullheight">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <div class="column is-4 is-offset-4">
+                    <h3 class="title has-text-black">Crack-O-Matic</h3>
+                    <div class="box">
+                        <form method="POST" action="login">
+                            <div class="field">
+                                <div class="control">
+                                    {{form.user(class_="input is-large", placeholder="Username", autofocus="" )}}
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <div class="control">
+                                    {{form.password(class_="input is-large", placeholder="Password")}}
+                                </div>
+                            </div>
+                            {% with messages = get_flashed_messages() %}
+                                {% for message in messages %}
+                                    <div class="notification is-light
+                                        is-danger">{{message}}</div>
+                                {% endfor %}
+                            {% endwith %}
+                            <div class="field">
+                                <label class="checkbox">
+                                    {{form.remember_me}} Remember me
+                                </label>
+                            </div>
+                            {{ form.csrf_token }}
+                            {{ form.next_url }}
+                            <input type="submit" class="button is-block is-info is-large is-fullwidth" value="Login">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+

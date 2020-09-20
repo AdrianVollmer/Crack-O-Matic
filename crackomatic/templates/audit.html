@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Audit {{audit_uuid}}{% endblock %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='crackomatic.css') }}">
+{% endblock %}
+
+{% import 'macros.jinja2' as macros %}
+
+{% block content %}
+  <div class="container">
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Audit {{audit['uuid']}}</h1>
+        <table class="table">
+          {% for k, v in audit.items() %}
+          <tr><td>
+                  {{display_str[k]}}
+              </td>
+              <td>
+                  {% if k == 'password' %}
+                      ***
+                  {% elif k == 'message' %}
+                      {{v[:30]}} <a href="#" title="View full message"
+                          class="button is-primary is-small"
+                          onclick='document.getElementById("msg-modal").classList.add("is-active")'>...</a>
+                  {% elif k == 'report' %}
+                      <a href="/report?id={{audit['uuid']}}">Click to view</a>
+                  {% else %} {{v}}
+                  {% endif %}
+              </td>
+          </tr>
+          {% endfor %}
+        </table>
+        <nav class="level">
+          <div class="buttons level-right">
+            <a href="/audits/new?id={{audit['uuid']}}"
+            class="button is-primary" title="Create new audit with the same defaults">Clone</a>
+            <form action="/audits/delete?id={{audit['uuid']}}"
+                  method="post" id='delete-form'>
+              <input type="submit" class="button is-danger" title="Delete audit" value="Delete"
+                    onclick="return confirm('Are you sure you want to delete this audit?')"/>
+            </form>
+          </div>
+        </nav>
+      </div>
+    </section>
+  </div>
+
+<div class="modal is-clipped" id="msg-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">E-mail message sent to users</p>
+      <button class="delete" aria-label="close"
+          onclick='document.getElementById("msg-modal").classList.remove("is-active")'></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Content ... -->
+      <pre>{{audit['message']}}</pre>
+    </section>
+    <footer class="modal-card-foot">
+    </footer>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Audits{% endblock %}
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='crackomatic.css') }}">
+{% endblock %}
+
+{% import 'macros.jinja2' as macros %}
+
+{% block content %}
+  <div class="container">
+    <section class="section">
+      <div class="container">
+          <nav class="level">
+            <div class="level-left"> </div>
+            <div class="level-right">
+              <a class="button is-primary" href="/audits/new">New audit</a>
+            </div>
+          </nav>
+        {% if running_audit %}
+        <h1 class="title">Currently running</h1>
+            {{macros.audit(running_audit)}}
+        {% endif %}
+        {% if scheduled_audits %}
+        <h1 class="title">Scheduled audits</h1>
+            {% for entry in scheduled_audits %}
+                {{macros.audit(entry)}}
+            {% endfor %}
+        {% endif %}
+        {% if past_audits %}
+        <h1 class="title">Past audits</h1>
+            {% for entry in past_audits %}
+                {{macros.audit(entry)}}
+            {% endfor %}
+            {% include 'pagination.html' %}
+        {% endif %}
+      </div>
+    </section>
+  </div>
+{% endblock %}
