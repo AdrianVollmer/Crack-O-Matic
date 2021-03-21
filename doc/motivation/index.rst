@@ -297,13 +297,14 @@ user sets the password. However, there are a few problems with it.
 So what can you do? The answer is: You do the same thing an attacker would
 do. Be one step ahead. **Regularly attempt to crack your users' passwords.**
 
-Enter Crack-O-Matic.
+Enter `Crack-O-Matic <https://github.com/AdrianVollmer/Crack-O-Matic>`_.
 
 
 How it works
 ============
 
-Crack-O-Matic provides a web application based on Python-Flask for
+`Crack-O-Matic <https://github.com/AdrianVollmer/Crack-O-Matic>`_
+provides a web application based on Python-Flask for
 scheduling either recurring or one-time audits.
 
 In the background, Crack-O-Matic uses `Samba <https://www.samba.org/>`_ to
