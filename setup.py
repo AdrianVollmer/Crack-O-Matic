@@ -28,7 +28,7 @@ setuptools.setup(
         'argon2-cffi',
         'babel',
     ],
-    python_requires='>=3',
+    python_requires='>=3.6',
     extras_require={
         'tests': [
             'pytest',
