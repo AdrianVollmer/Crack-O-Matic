@@ -9,6 +9,12 @@ setuptools.setup(
                 'with weak passwords',
     long_description=open('README.md', 'r').read(),
     long_description_content_type='text/markdown',
+    url="https://github.com/AdrianVollmer/Crack-O-Matic",
+    project_urls={
+        "Read The Docs": "https://crack-o-matic.readthedocs.io",
+        "Issue Tracker":
+        "https://github.com/AdrianVollmer/Crack-O-Matic/issues",
+    },
     packages=setuptools.find_packages(),
     entry_points={
         'console_scripts': [
