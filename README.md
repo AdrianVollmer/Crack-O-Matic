@@ -12,7 +12,7 @@ Features:
 * Graphical reports
 * Privacy preserving
 
-[Read the docs](https://crackomatic.readthedocs.io) for more information.
+[Read the docs](https://crack-o-matic.readthedocs.io) for more information.
 
 
 Tests
