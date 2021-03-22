@@ -1,5 +1,5 @@
-Why are weak passwords a problem?
-=================================
+The danger of Active Directory accounts with weak passwords
+===========================================================
 
 One single weak password can endanger your entire environment. Attackers
 love weak passwords. They can exploit the use of weak passwords or password
@@ -7,15 +7,23 @@ reuse in several scenarios. Let's take a close look at these scenarios and
 what you, as an administrator, can do to protect your organization in each
 of them. The focus is always Microsoft Active Directory Domain Services.
 
+All of these scenarios have in common that only a password stands between an
+attacker and his goal of privilege escalation. In Active Directory,
+privilege escalation often happens step by step, account by account, machine
+by machine. At every step, the attacker gains more privileges until they
+have domain admin privileges. This is called lateral movement and is a central
+technique in attacks on Active Directory.
+
 
 Online Password Guessing Attacks
 --------------------------------
 
-This is when you try to guess passwords against a live service. It may be
-your internal Kerberos service or a service that you expose to the internet,
-such as an Outlook Web Application, RDP or an SSH service. Now, these
-shouldn't be exposed to the internet without multi-factor authentication in
-the first place, but that's a different story.
+In online password guessting attacks, you try to guess passwords against a
+live service. It may be your internal Kerberos service or a service that you
+expose to the internet, such as an Outlook Web Application, RDP or an SSH
+service. Now, these shouldn't be exposed to the internet without
+multi-factor authentication in the first place, but that's a different
+story.
 
 The usual mitigation to online password guessing attacks (besides MFA) is to
 only allow a few failed attempts before locking the account. But I see two
@@ -42,10 +50,10 @@ minutes, our attacker gets a couple more attempts.
 
 By the way, even a limited lockout duration could be a problem, if important
 service accounts are being constantly locked out by someone. The trick here
-is to define a fine-grained password policy for service accounts and remove the
-lockout threshold. Just make sure that these accounts have super strong
-passwords. Or simply use `Group Managed Service
-Accounts <https://docs.microsoft.com/en-us/windows-server/security/group-managed-service-accounts/group-managed-service-accounts-overview>`_.
+is to define a fine-grained password policy for service accounts and remove
+the lockout threshold. Just make sure that these accounts have super strong
+passwords. Or simply use `Group Managed Service Accounts
+<https://docs.microsoft.com/en-us/windows-server/security/group-managed-service-accounts/group-managed-service-accounts-overview>`_.
 
 
 NTLM Authentication Hashes
@@ -101,7 +109,7 @@ offline password guessing attack.
 
 Accounts compromised by kerberoasting often have at least admin privileges
 on the machine that the associated service is running on. Sometimes they
-are even more powerful.
+are even more powerful. Another opportunity for lateral movement.
 
 Requesting a service ticket is a normal process and there is nothing you can
 do about it. Sure, someone requesting 20 tickets within a single second
@@ -304,7 +312,7 @@ How it works
 ============
 
 `Crack-O-Matic <https://github.com/AdrianVollmer/Crack-O-Matic>`_
-provides a web application based on Python-Flask for
+provides a free and open source web application based on Python-Flask for
 scheduling either recurring or one-time audits.
 
 In the background, Crack-O-Matic uses `Samba <https://www.samba.org/>`_ to
