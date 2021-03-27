@@ -1,0 +1,3 @@
+graft crackomatic/static
+graft crackomatic/templates
+global-exclude *.pyc

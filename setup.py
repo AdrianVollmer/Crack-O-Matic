@@ -16,6 +16,7 @@ setuptools.setup(
         "https://github.com/AdrianVollmer/Crack-O-Matic/issues",
     },
     packages=setuptools.find_packages(),
+    include_package_data=True,
     entry_points={
         'console_scripts': [
             'crackomatic=crackomatic.__main__:main'
