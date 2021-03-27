@@ -1,12 +1,22 @@
 import json
+from packaging import version
+
+import wtforms
 
 from .constants import AuditFrequency
 from .forms import NewAuditForm
 from .config import cracker_fields, email_fields
 
 
+# We need to check the version of wtforms.
+# Version 2.3 expects a string, version 2.2 expects an int.
+frequency_default = int(AuditFrequency.JUST_ONCE)
+if version.parse(wtforms.__version__) >= version.parse('2.3.0'):
+    frequency_default = str(frequency_default)
+
+
 DEFAULTS = {
-    'frequency': str(int(AuditFrequency.JUST_ONCE)),
+    'frequency': frequency_default,
     'start': "",
 }
 

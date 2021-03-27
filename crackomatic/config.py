@@ -9,7 +9,9 @@ from wtforms.validators import DataRequired
 cracker_fields = [
     wtforms.SelectField(
         "Cracker",
-        choices=["John", "Hashcat"],
+        choices=[("John", "John"), ("Hashcat", "Hashcat")],
+        # wtforms 2.2 requires a list of tuples
+        # https://github.com/wtforms/wtforms/pull/526
         description={
             'id': 'cracker',
             'help': "Choose 'John' or 'Hashcat'",
@@ -34,12 +36,12 @@ cracker_fields = [
         validators=[DataRequired()],
     ),
     wtforms.StringField(
-            "Rule Path",
-            description=dict(
-                id='rule_path',
-                help="Path to the rule file (we recommend <a href='https://github.com/NotSoSecure/password_cracking_rules'>OneRule</a> or <a href='https://github.com/SpiderLabs/KoreLogic-Rules'>KoreLogic</a>)", # noqa
-                placeholder="/usr/share/hashcat/rules/OneRule.rule",
-            ),
+        "Rule Path",
+        description=dict(
+            id='rule_path',
+            help="Path to the rule file (we recommend <a href='https://github.com/NotSoSecure/password_cracking_rules'>OneRule</a> or <a href='https://github.com/SpiderLabs/KoreLogic-Rules'>KoreLogic</a>)", # noqa
+            placeholder="/usr/share/hashcat/rules/OneRule.rule",
+        ),
     ),
 ]
 

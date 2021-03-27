@@ -30,7 +30,7 @@ setuptools.setup(
         'gevent',
         'sqlalchemy',
         'matplotlib',
-        'wtforms',
+        'wtforms>=2.2.0',
         'ldap3',
         'argon2-cffi',
         'babel',
