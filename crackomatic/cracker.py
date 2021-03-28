@@ -200,12 +200,13 @@ class John(Cracker):
             self._bin_path,
             self._hash_file,
             '--format=nt',
-            '--fork=%d' % cores,
             '--pot=%s' % self._potfile,
             '--wordlist=%s' % self._wordlist,
             '--rules=%s' % self._rules,
             *self._args,
         ]
+        if cores > 1:
+            cmd.append('--fork=%d' % cores)
         return cmd
 
     def _get_version(self):
