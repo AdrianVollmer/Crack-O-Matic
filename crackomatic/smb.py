@@ -1,3 +1,4 @@
+from __future__ import print_function
 import shutil
 import os
 import subprocess
@@ -5,6 +6,10 @@ from logging import getLogger
 log = getLogger(__name__)
 
 _DIR_NAME = 'smb_dc'
+
+
+class SambaNotFound(RuntimeError):
+    pass
 
 
 def patched_do_join(ctx):
@@ -32,7 +37,7 @@ def replicate(root_dir, domain, ip, username, password, history=False):
         from samba import join
         from samba.netcmd.main import cmd_sambatool
     except ImportError:
-        raise RuntimeError("Samba not installed")
+        raise SambaNotFound("Samba not installed")
     try:
         # Monkey patch the samba libs
         join.DCJoinContext.do_join = patched_do_join
@@ -43,9 +48,11 @@ def replicate(root_dir, domain, ip, username, password, history=False):
     log.info("Start replication")
     # change all directories so we don't need root
     options = {
+        "server role": "active directory domain controller",
         "smb passwd file": "%(ROOT)s/smbpasswd",
         "log file": "%(ROOT)s/samba.log",
         "lock directory": "%(ROOT)s/samba",
+        "bind dns directory": "%(ROOT)s/samba",
         "state directory": "%(ROOT)s/samba",
         "cache directory": "%(ROOT)s/samba",
         "pid directory": "%(ROOT)s/samba",
@@ -66,6 +73,7 @@ def replicate(root_dir, domain, ip, username, password, history=False):
         "--ipaddress=%s" % ip,
         "--server=%s" % ip,
         "--realm=%s" % domain,
+        "--targetdir=%s" % root_dir,
         *opts
     )
     if retval and retval != 0:
@@ -113,8 +121,72 @@ def get_hashes(domain, username, password, root_dir='/tmp',
     try:
         if not ip:
             ip = domain
-        replicate(root_dir, domain, ip, username, password)
+        try:
+            replicate(root_dir, domain, ip, username, password, history)
+        except SambaNotFound:
+            call_as_script(
+                root_dir,
+                domain,
+                ip,
+                username,
+                password,
+                history,
+            )
         hashes = read_hashes_from_sam(root_dir)
         return hashes
     finally:
         remove_dir(root_dir)
+
+
+def call_as_script(root_dir, domain, ip, username, password, history):
+    """Call this file as a script with Python2.7"""
+    script_path = __file__
+    cmd = [
+        'python2.7',
+        script_path,
+        '--root_dir', root_dir,
+        '--domain', domain,
+        '--ip', ip,
+        '--username', username,
+        '--password', password,
+        '--history', str(history),
+    ]
+    p = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+    )
+    result, errors = p.communicate()
+    print(result.decode())
+    if p.returncode:
+        raise RuntimeError(errors.decode())
+
+
+# We make this executable as a script, so it can be called via
+# subprocess.call in case the samba lib is only available in Pyhon2. This is
+# the case if the Samba version is <4.10.
+if __name__ == "__main__":
+    import argparse
+    import sys
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--root_dir')
+    parser.add_argument('--domain')
+    parser.add_argument('--username')
+    parser.add_argument('--password')  # TODO problem?
+    parser.add_argument('--ip')
+    parser.add_argument('--history', type=bool, default=False)
+    args = parser.parse_args()
+
+    try:
+        replicate(
+            args.root_dir,
+            args.domain,
+            args.ip,
+            args.username,
+            args.password,
+            args.history,
+        )
+    except Exception as e:
+        print(e, file=sys.stderr)
+        sys.exit(-1)
