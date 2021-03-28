@@ -24,8 +24,9 @@ def test_ldap_query(global_data):
                         search_filter, search_attribute)
 
     assert result
-    admin = result['CN=Administrator,CN=Users,DC=crack,DC=local']
-    assert admin['sAMAccountName'][0] == b'Administrator'
+    admin = result['CN=%s,CN=Users,%s' % (global_data['DOMAINUSER'],
+                                          domain_dn)]
+    assert admin['sAMAccountName'][0] == global_data['DOMAINUSER'].encode()
 
 
 def test_ldap_auth(global_data):
@@ -38,8 +39,7 @@ def test_ldap_auth(global_data):
         'ca_file': get_ca_file(url),
         'basedn': 'CN=Users,%s' % dn,
         'binddn': 'CN=%%s,CN=Users,%s' % dn,
-        'filter': "(&(objectClass=user)"
-        "(memberOf=CN=Domain Admins,CN=Users,%s))" % dn,
+        'filter': "(sAMAccountName=%s)" % global_data['DOMAINUSER'],
     }
 
     auth = User.authenticate_ldap(
