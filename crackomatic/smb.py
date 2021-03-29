@@ -89,7 +89,8 @@ def read_hashes_from_sam(root_dir):
         'pdbedit',
         '-L',
         '-w',
-        '--option=private dir=%s/samba' % root_dir
+        '-s', '%s/etc/smb.conf' % root_dir,
+        '--option=private dir=%s/samba' % root_dir,
     ]
     p = subprocess.Popen(
         cmd,
