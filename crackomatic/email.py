@@ -13,7 +13,7 @@ def send_mail(receiver_email, subject, body, config):
     message["From"] = config['smtpsender']
     message["Subject"] = subject
     if isinstance(receiver_email, list):
-        message["To"] = "Undisclosed Recipients"
+        message["To"] = '"Undisclosed Recipients"'
         message["Bcc"] = ", ".join(receiver_email)
     else:
         message["To"] = receiver_email

@@ -14,9 +14,10 @@ Cheers!''',
         email_config,
     )
 
+    print(mock_server.received_messages)
     assert(mock_server.received_message_matching(
         ".*From: noreply@crackomatic.*"
-        ".*Subject: crackomatic.*To: Undisc.*Bcc: santa@northpole.com,"
+        ".*Subject: crackomatic.*To: \"Undisc.*Bcc: santa@northpole.com,"
         " nessie@lochness.net.*Hey there,.*Cheers!.*"
     ))
     mock_server.reset()
