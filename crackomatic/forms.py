@@ -47,12 +47,12 @@ class NewAuditForm(FlaskForm):
     frequency = SelectField(
         "Frequency",
         choices=[
-            (int(AuditFrequency.JUST_ONCE), "Just once"),
-            (int(AuditFrequency.DAILY), "Daily"),
-            (int(AuditFrequency.WEEKLY), "Weekly"),
-            (int(AuditFrequency.MONTHLY), "Monthly"),
-            (int(AuditFrequency.QUARTERLY), "Quarteryl"),
-            (int(AuditFrequency.YEARLY), "Yearly"),
+            (str(int(AuditFrequency.JUST_ONCE)), "Just once"),
+            (str(int(AuditFrequency.DAILY)), "Daily"),
+            (str(int(AuditFrequency.WEEKLY)), "Weekly"),
+            (str(int(AuditFrequency.MONTHLY)), "Monthly"),
+            (str(int(AuditFrequency.QUARTERLY)), "Quarteryl"),
+            (str(int(AuditFrequency.YEARLY)), "Yearly"),
         ],
         validators=[DataRequired()],
         description=dict(
