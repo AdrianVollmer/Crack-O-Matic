@@ -64,7 +64,5 @@ def test_dc_rep(global_data):
                                 dump_after.splitlines())
     assert '\n'.join(diff) == ""
     assert 'krbtgt:' in hashes
-    assert 'Administrator:' in hashes
-    assert ':7cbdc9e02a9d42705dd88396fea70f32:' in hashes
     # Check if dir is deleted
     assert not os.path.isdir(os.path.join(ROOT_DIR, _DIR_NAME))
