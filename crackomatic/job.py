@@ -8,7 +8,7 @@ from .smb import get_hashes
 from .cracker import get_cracker
 from .reports import create_text_report, create_report
 from .email import send_mails
-from .constants import AuditState, FINISHED_STATES
+from .constants import AuditState, FINISHED_STATES, URL
 from .ldap import ldap_query
 
 log = getLogger(__name__)
@@ -16,6 +16,8 @@ log = getLogger(__name__)
 
 ADMIN_MSG = """
 This is the report of the latest Crack-O-Matic audit.
+
+%(URL)s
 
 Start: %(START)s
 End: %(END)s
@@ -33,7 +35,7 @@ class Job(Thread):
         self.lock = lock
         self.cracker_config = cracker_config
         self.email_config = email_config
-        self.cb_update = cb_update
+        self.cb_update = cb_update  # cb = callback
         self.cb_cleanup = cb_cleanup
         self.password = password
         self.cracker = None
@@ -150,14 +152,16 @@ class Job(Thread):
         if audit.include_cracked:
             cracked_list = (
                 "\n\nThe following users' passwords were recovered:\n\n"
-            ) + '\n'.join(compromised_users)
+            ) + '\n'.join(sorted(compromised_users))
         else:
             cracked_list = ""
+        url = ("%s/report?id=%s" % (URL, audit.uuid)) if URL else ''
         admin_msg = ADMIN_MSG % {
             "START": audit.start,
             "END": str(dt.now()),
             "REPORT": self.text_report,
             "CRACKED_LIST": cracked_list,
+            "URL": url,
         }
         admin_emails = list(admin_emails.values())
 

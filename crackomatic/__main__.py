@@ -20,6 +20,7 @@ def run_web(args):
 
     from .flask import app, backend
     from .cert import load_selfsigned_cert
+    import crackomatic.constants as constants
 
     log = getLogger(__name__)
 
@@ -40,6 +41,7 @@ def run_web(args):
             port=args.port,
             use_reloader=False,
         ))
+        constants.URL = 'https://%s:%d' % (args.local_address, args.port)
 
         http_server = WSGIServer(
             (args.local_address, args.port),

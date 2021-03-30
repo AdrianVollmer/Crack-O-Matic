@@ -26,3 +26,6 @@ FINISHED_STATES = [
     AuditState.ABORTED,
     AuditState.FAILED,
 ]
+
+
+URL = ''
