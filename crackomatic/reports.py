@@ -202,6 +202,7 @@ def histogram(dct, xmin=0):
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.set_ylabel('#')
+    ax.yaxis.get_major_locator().set_params(integer=True)
     ax.bar(new_dct.keys(), new_dct.values(), tick_label=list(new_dct.keys()))
     svg = get_svg(plt)
     plt.close()
