@@ -237,7 +237,7 @@ def test_audit_success(client, caplog, global_data, mock_server):
     # Mock replication takes 10 seconds
     time.sleep(5)
     assert job.audit.state == AuditState.REPLICATING
-    time.sleep(7)
+    time.sleep(9)
 
     # Check status meant for home page is CRACKING
     status = flask.backend.get_status()
