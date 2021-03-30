@@ -121,11 +121,15 @@ def login():
         if not is_safe_url(next_url):
             return flask.abort(400)
         auth_config = backend.config['authentication']
-        user = User.authenticate(
-            form.user.data,
-            form.password.data,
-            auth_config,
-        )
+        user = None
+        try:
+            user = User.authenticate(
+                form.user.data,
+                form.password.data,
+                auth_config,
+            )
+        except Exception as e:
+            log.warning(str(e))
         if not user:
             flask.flash("Invalid username or password.", 'danger')
             return flask.render_template('login.html', form=form)
