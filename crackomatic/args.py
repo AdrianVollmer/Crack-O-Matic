@@ -1,8 +1,10 @@
 import argparse
 from logging import getLogger
 import os
+import sys
 
 from xdg.BaseDirectory import save_data_path
+import toml
 
 from ._version import __version__
 
@@ -19,7 +21,7 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument(
-    '-v', '--version', action='version', version='Crack-O-Mat ' + __version__
+    '-v', '--version', action='version', version='Crack-O-Matic ' + __version__
 )
 
 parser.add_argument(
@@ -30,6 +32,11 @@ parser.add_argument(
 parser.add_argument(
     '-b', '--db-path', default=DB_PATH,
     help="path to the database location (default: %(default)s)",
+)
+
+parser.add_argument(
+    '-C', '--config-path', default='/etc/crackomatic/crackomatic.conf',
+    help="path to the config file location (default: %(default)s)",
 )
 
 
@@ -50,7 +57,7 @@ parser_web = subparsers.add_parser(
 )
 
 parser_web.add_argument(
-    '-p', '--port', default=3000,
+    '-p', '--port', default=3000, type=int,
     help="listening port (default: %(default)s)",
 )
 
@@ -127,5 +134,20 @@ parser_user.add_argument(
 
 def parse_args(argv=None):
     args = parser.parse_args(argv)
+    if not argv:
+        argv = sys.argv
+
+    # Load TOML config file
+    if os.path.exists(args.config_path):
+        with open(args.config_path, 'r') as f:
+            config = toml.load(f)
+    else:
+        config = {}
+
+    # Set arguments that haven't been set via command line
+    for p in ['port', 'local_address', 'key', 'cert']:
+        argument = '--' + p.replace('_', '-')
+        if p in config and (argv is None or argument not in argv):
+            setattr(args, p, config[p])
 
     return args
