@@ -79,7 +79,7 @@ def generate_selfsigned_cert(hostname, ip_addresses=None, key=None):
         .subject_name(name)
         .issuer_name(name)
         .public_key(key.public_key())
-        .serial_number(1000)
+        .serial_number(x509.random_serial_number())
         .not_valid_before(now)
         .not_valid_after(now + timedelta(days=2*365))
         .add_extension(basic_contraints, False)
