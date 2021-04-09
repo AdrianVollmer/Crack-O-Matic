@@ -242,6 +242,7 @@ Please contact your IT department if you have further questions.
     if audit_uuid:
         _, audit = backend.get_report_and_audit(audit_uuid)
         audit['password'] = ''
+        audit['start'] = ''
         form = NewAuditForm(**dict(audit))
     else:
         form = NewAuditForm(message=AUDIT_MESSAGE)
