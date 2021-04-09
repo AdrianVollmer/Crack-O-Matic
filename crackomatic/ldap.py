@@ -1,6 +1,14 @@
 import ldap
 
 
+def check_if_file_readable(path):
+    """Check if the file exists and has the correct permissions
+
+    Should raise a more telling exception than the ldap library."""
+    with open(path, 'r') as f:
+        f.read()
+
+
 def ldap_query(url, basedn, ca_file, binddn, password, search_filter,
                search_attributes=[]):
     '''Perform an LDAP query and return a list of its results
@@ -18,6 +26,9 @@ def ldap_query(url, basedn, ca_file, binddn, password, search_filter,
     search_scope = ldap.SCOPE_SUBTREE
     conn.protocol_version = ldap.VERSION3
     if url.startswith('ldaps'):
+        # Because the error messages produced by the ldap library aren't
+        # very telling, we do a quick consistency check here.
+        check_if_file_readable(ca_file)
         conn.set_option(ldap.OPT_X_TLS_CACERTFILE, ca_file)
         conn.set_option(ldap.OPT_X_TLS, ldap.OPT_X_TLS_DEMAND)
         conn.set_option(ldap.OPT_X_TLS_DEMAND, True)
