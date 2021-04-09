@@ -201,6 +201,7 @@ class John(Cracker):
             self._hash_file,
             '--format=nt',
             '--pot=%s' % self._potfile,
+            '--no-log',
             '--wordlist=%s' % self._wordlist,
             '--rules=%s' % self._rules,
             *self._args,
