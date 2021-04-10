@@ -85,6 +85,7 @@
 
 
 {%- macro render_report_card(figure) -%}
+{%- if figure['html'] -%}
   <div class="columns">
     <div class="column">
       <div class="card" style='width: 100%'>
@@ -97,4 +98,5 @@
       <p>{{figure['description']}}</p>
     </div>
   </div>
+{%- endif -%}
 {%- endmacro -%}

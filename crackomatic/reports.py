@@ -97,7 +97,10 @@ using any number of character classes.""",
 
 
 def create_report(passwords, hashes):
-    cracked = len(passwords)/len(hashes)
+    if len(hashes):
+        cracked = len(passwords)/len(hashes)
+    else:
+        cracked = 0
 
     if len(passwords):
         mean_pw_len = sum(map(len, passwords))/len(passwords)
@@ -171,7 +174,7 @@ def get_text_represenation(report, quantity):
 def get_html_representation(report, quantity):
     val = getattr(report, quantity)
     if val is None:
-        return '<p class="scalar">Undefined</p>'
+        return ''
     type = meta_data[quantity]['type']
     if type == QuantityType.PERCENTAGE:
         return gauge_chart(val)

@@ -31,16 +31,61 @@ def cracked(request):
 
 def test_text_report(cracked):
     hashes, passwords = cracked
-    from crackomatic.reports import create_report, create_text_report
+    from crackomatic.reports import create_report, create_text_report, \
+        create_figures
+
+    # Test an expected report
     r = create_report(passwords, hashes)
+    print(r.__dict__)
     text = create_text_report(r)
+    figures = create_figures(r)
     assert '1726' in text
     assert '82.62%' in text
     assert '8.70' in text
     assert '30.84%' in text
     assert '["angel", 6]' in r.top_basewords
     assert '["?", 1426]' in r.top_patterns
-    print(r.__dict__)
+    assert '<svg' in figures[0]['html']
+    assert '82.6%' in figures[0]['html']
+    assert 'Percentage of hashes cracked' in figures[0]['title']
+    assert '<p class="scalar">1726</p>' == figures[1]['html']
 
+    # Test a somewhat irregular report
     r = create_report(['foo'], ['bar'])
+    print(r.__dict__)
+    text = create_text_report(r)
+    figures = create_figures(r)
     assert r.cliquiness is None
+    assert '100.00%' in text
+    assert '100%' in figures[0]['html']
+    assert '1' in figures[1]['html']
+    assert '3.0' in figures[5]['html']
+
+    # Test if no hashes have been cracked
+    r = create_report([], ['foo']*10)
+    print(r.__dict__)
+    text = create_text_report(r)
+    figures = create_figures(r)
+    assert 'Mean password length: Undefined' in text
+    assert 'Length distribution: {}' in text
+    assert 'Top patterns: []' in text
+    assert figures[6]['html'] == ''
+    assert figures[7]['html'] == ''
+    assert figures[8]['html'] == ''
+    assert figures[9]['html'] == ''
+
+    # Test if no passwords have been supplied
+    r = create_report([], [])
+    print(r.__dict__)
+    text = create_text_report(r)
+    figures = create_figures(r)
+    assert 'Mean password length: Undefined' in text
+    assert 'Length distribution: {}' in text
+    assert 'Top patterns: []' in text
+    assert figures[1]['html'] == '<p class="scalar">0</p>'
+    assert figures[3]['html'] == ''
+    assert figures[5]['html'] == ''
+    assert figures[6]['html'] == ''
+    assert figures[7]['html'] == ''
+    assert figures[8]['html'] == ''
+    assert figures[9]['html'] == ''
