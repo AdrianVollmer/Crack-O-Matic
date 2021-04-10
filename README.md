@@ -18,9 +18,9 @@ Features:
 Screenshots
 -----------
 
-![Report 1](https://github.com/AdrianVollmer/Crack-O-Matic/blob/master/doc/report1.png)
+![Report 1](https://github.com/AdrianVollmer/Crack-O-Matic/blob/main/doc/report1.png)
 
-![Report 2](https://github.com/AdrianVollmer/Crack-O-Matic/blob/master/doc/report2.png)
+![Report 2](https://github.com/AdrianVollmer/Crack-O-Matic/blob/main/doc/report2.png)
 
 
 Tests
