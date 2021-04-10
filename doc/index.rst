@@ -1,8 +1,3 @@
-.. Crack-O-Matic documentation master file, created by
-   sphinx-quickstart on Sat Sep 26 00:57:24 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to Crack-O-Matic's documentation!
 =========================================
 
@@ -21,8 +16,7 @@ finding and notifying users of your Active Directory who use weak passwords.
 
    motivation/index.rst
 
-..
-   toctree::
+.. toctree::
    :hidden:
    :maxdepth: 2
    :caption: Installation

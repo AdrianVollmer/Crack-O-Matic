@@ -3,6 +3,23 @@ web interface which you can access with a browser, or run it in server-less
 mode, in case you just want to run a one-off audit on the command line of
 the server.
 
+.. _preparation:
+
+Preparation
+===========
+
+No matter which mode you choose, there are a few things you must prepare.
+Shell access is necessary for the preparation.
+
+#. Keep the root certificate of your Active Directory LDAP service in PEM format ready.
+
+#. If you want to use TLS with the SMTP server, get the corresponding root certificate as well, if it is different than the one from the previous step.
+
+#. Download a suitable wordlist such as `CrackStation <https://crackstation.net/crackstation-wordlist-password-cracking-dictionary.htm>`_ and copy it onto the system.
+
+#. Install either `John "Jumbo" <https://github.com/openwall/john>`_ or `Hashcat <https://hashcat.net/hashcat/>`_. If you choose John, make sure to install the "Jumbo" version. You might have to compile it yourself, as many distributions do not ship the Jumbo version. Kali Linux is one that does.  Hashcat is more readily available. Note that Hashcat can take advantage of graphics cards if the right drivers are installed. Please refer to the respective documentation for installation. You also may want to download a ruleset for Hashcat such as `OneRule <https://notsosecure.com/one-rule-to-rule-them-all/>`_.
+
+#. Create a dedicated account and put it in the group of domain administrators. Give it a strong password!
 
 Server Mode
 ===========
@@ -32,13 +49,7 @@ and set up simple LDAP authentication. This is optional.
 The other configuration settings are not optional. You need to configure the
 cracker and the e-mail settings.
 
-For the cracker, you can choose between John and Hashcat. If you choose
-John, make sure to install the `"Jumbo" version
-<https://github.com/openwall/john>`_. You might have to compile it yourself,
-as many distributions do not ship the Jumbo version. Kali Linux is one that
-does. Hashcat is more readily available. Note that Hashcat can take
-advantage of graphics cards if the right drivers are installed. Please refer
-to the respective documentation for installation.
+For the cracker, you can choose between John and Hashcat.
 
 Crack-O-Matic does not come with a wordlist. You need to download a wordlist
 and specify a local path to that file in the "Cracker" section.
@@ -133,7 +144,8 @@ prompted for missing fields. Here is an example of an audit file:
     }
 
 Note that for boolean fields such as ``smtptls`` or ``include_cracked`` that
-empty means ``False`` and everything else means ``True``.
+empty means ``False`` and everything else means ``True``. See the previous
+section for more details.
 
 When you are finished, execute ``crackomatic audit <path to audit file>`` to
 run the audit. If you want to do a test run, choose a short wordlist and see
@@ -156,7 +168,7 @@ controller. It, too, belongs in tier 0.
 
 Do not use the Crack-O-Matic service account for anything else. Choose a
 strong and unique password. Do not put this account into the group of domain
-administrators. Instead, give it the permission of "Replicate Directory
+administrators. Instead, give it only the permission of "Replicate Directory
 Changes All" to the domain in question and make it a Protected User.
 
 If you want to harden the system even more, you could block all incoming
