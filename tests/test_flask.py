@@ -193,6 +193,8 @@ def test_audit_success(client, caplog, global_data, mock_server):
     is as expected.
 
     """
+    from crackomatic import constants
+    constants.URL = 'https://localhost:3000'
     from crackomatic.backend import AuditState
     from common import audit_config
     audit_config = audit_config(global_data)
@@ -317,6 +319,9 @@ def test_audit_success(client, caplog, global_data, mock_server):
     ))
     assert(mock_server.received_message_matching(".*were recovered.*"))
     assert(mock_server.received_message_matching(".*Start:.*"))
+    assert(mock_server.received_message_matching(
+        ".*https://localhost:3000/report\\?id=.*"
+    ))
     assert(mock_server.received_message_matching(
         '.*Your password has been cracked.*'
     ))

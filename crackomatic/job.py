@@ -8,7 +8,7 @@ from .smb import get_hashes
 from .cracker import get_cracker
 from .reports import create_text_report, create_report
 from .email import send_mails
-from .constants import AuditState, FINISHED_STATES, URL
+from .constants import AuditState, FINISHED_STATES
 from .ldap import ldap_query
 
 log = getLogger(__name__)
@@ -133,6 +133,7 @@ class Job(Thread):
         return emails
 
     def send_notifications(self, compromised_users):
+        from .constants import URL
         audit = self.audit
         user_emails = self.get_email_addresses(audit.user_filter, audit)
         admin_emails = self.get_email_addresses(audit.admin_filter, audit)
@@ -159,6 +160,7 @@ class Job(Thread):
             ) + '\n'.join(sorted(compromised_users))
         else:
             cracked_list = ""
+        print("URL: ", URL)
         url = ("%s/report?id=%s" % (URL, audit.uuid)) if URL else ''
         admin_msg = ADMIN_MSG % {
             "START": audit.start,
