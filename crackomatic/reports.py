@@ -193,7 +193,7 @@ def get_html_representation(report, quantity):
 def histogram(dct, xmin=0):
     dct = json.loads(dct)
     if not dct:
-        return ""
+        return ''
     plt.rcdefaults()
     new_dct = {}
     for i in range(xmin, 1 + max(map(int, dct.keys()))):
@@ -324,7 +324,7 @@ def bar_chart(lst):
     """Takes a string that is json-convertable to a list of tuples"""
     lst = json.loads(lst)
     if not lst:
-        return ""
+        return ''
     labels = [x[0] for x in lst]
     values = [x[1] for x in lst]
     plt.rcdefaults()

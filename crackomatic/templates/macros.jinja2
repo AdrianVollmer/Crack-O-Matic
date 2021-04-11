@@ -85,7 +85,7 @@
 
 
 {%- macro render_report_card(figure) -%}
-{%- if figure['html'] -%}
+{%- if figure['html'] != '' -%}
   <div class="columns">
     <div class="column">
       <div class="card" style='width: 100%'>
