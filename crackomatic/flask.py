@@ -346,7 +346,7 @@ def report():
     except Exception as e:
         log.error("Error while retrieving report: %s" % str(e))
         log.exception(e)
-        return str(e), 500
+        return "Unable to retrieve report", 500
     return flask.render_template(
         'report.html',
         audit_id=audit_id,
