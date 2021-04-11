@@ -145,35 +145,36 @@ def create_report(passwords, hashes):
 def create_text_report(report):
     result = ""
     for k, v in meta_data.items():
-        value = get_text_represenation(report, k)
-        if isinstance(value, dict):
+        value = getattr(report, k)
+        try:
+            value = json.loads(value)
+        except Exception:
+            pass
+        if not isinstance(value, int) and not value:
+            continue
+        elif meta_data[k]['type'] == QuantityType.PERCENTAGE:
+            result += "%s: %.02f%%\n" % (v['title'], value * 100)
+        elif (meta_data[k]['type'] == QuantityType.SCALAR
+              and isinstance(value, float)):
+            result += "%s: %.02f\n" % (v['title'], value)
+        elif isinstance(value, dict):
             result += "%s:\n    " % v['title']
-            result += "\n    ".join(["%s: %s" % (k, str(v)) for k, v in value])
+            result += "\n    ".join(["%s: %s" % (k, str(v))
+                                     for k, v in value.items()])
+            result += '\n'
         elif isinstance(value, list):
             result += "%s:\n    " % v['title']
-            result += "\n    ".join(["%s: %s" % (k, str(v)) for k, v in value])
+            result += "\n    ".join(["%s: %s" % (k[0], k[1]) for k in value])
+            result += '\n'
         else:
             result += "%s: %s\n" % (v['title'], value)
 
     return result
 
 
-def get_text_represenation(report, quantity):
-    val = getattr(report, quantity)
-    if val is None:
-        return 'Undefined'
-    type = meta_data[quantity]['type']
-    if type == QuantityType.PERCENTAGE:
-        return '%.02f%%' % (val * 100)
-    elif type == QuantityType.SCALAR and isinstance(val, float):
-        return '%.02f' % val
-    else:
-        return str(val)
-
-
 def get_html_representation(report, quantity):
     val = getattr(report, quantity)
-    if val is None:
+    if not isinstance(val, int) and not val:
         return ''
     type = meta_data[quantity]['type']
     if type == QuantityType.PERCENTAGE:

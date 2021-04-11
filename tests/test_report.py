@@ -44,7 +44,9 @@ def test_text_report(cracked):
     assert '8.70' in text
     assert '30.84%' in text
     assert '["angel", 6]' in r.top_basewords
+    assert 'angel: 6' in text
     assert '["?", 1426]' in r.top_patterns
+    assert '?: 1426' in text
     assert '<svg' in figures[0]['html']
     assert '82.6%' in figures[0]['html']
     assert 'Percentage of hashes cracked' in figures[0]['title']
@@ -66,9 +68,10 @@ def test_text_report(cracked):
     print(r.__dict__)
     text = create_text_report(r)
     figures = create_figures(r)
-    assert 'Mean password length: Undefined' in text
-    assert 'Length distribution: {}' in text
-    assert 'Top patterns: []' in text
+    print(text)
+    assert 'Mean password length' not in text
+    assert 'Length distribution' not in text
+    assert 'Top patterns' not in text
     assert figures[6]['html'] == ''
     assert figures[7]['html'] == ''
     assert figures[8]['html'] == ''
@@ -79,9 +82,9 @@ def test_text_report(cracked):
     print(r.__dict__)
     text = create_text_report(r)
     figures = create_figures(r)
-    assert 'Mean password length: Undefined' in text
-    assert 'Length distribution: {}' in text
-    assert 'Top patterns: []' in text
+    assert 'Mean password length' not in text
+    assert 'Length distribution' not in text
+    assert 'Top patterns' not in text
     assert figures[1]['html'] == '<p class="scalar">0</p>'
     assert figures[3]['html'] == ''
     assert figures[5]['html'] == ''
