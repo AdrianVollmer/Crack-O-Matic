@@ -26,8 +26,8 @@ respects your privacy. Feel free to review `the source code
 <https://github.com/AdrianVollmer/Crack-O-Matic>`_ and its dependencies,
 which all have sufficient reputation to be in the Debian repositories.
 
-Non-domain-joined systems
-=========================
+Limitations
+===========
 
 Obviously, Crack-O-Matic can only check passwords of domain accounts. There
 may be systems which may be critical to your business operations but are not
@@ -36,4 +36,6 @@ policy. This could be appliances, Linux systems, firewalls, and so on. Don't
 forget to pay special attention to these systems.
 
 The same goes for local Windows accounts. These are not visible to
-Crack-O-Matic.
+Crack-O-Matic. You should use `LAPS
+<https://www.microsoft.com/en-us/download/details.aspx?id=46899>`_ to manage
+those if you don't already.
