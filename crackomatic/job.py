@@ -87,6 +87,10 @@ class Job(Thread):
                 root_dir=self._root_dir.name,
             )
             self.cracker.wait_until_finished()
+            if self.cracker.passwords is None:
+                raise RuntimeError(
+                    "Something went wrong while cracking; check the logs"
+                )
             self.update_state(AuditState.ANALYZING)
             passwords = [p for p in self.cracker.passwords.values()
                          if p is not None]

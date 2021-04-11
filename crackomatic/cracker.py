@@ -92,14 +92,16 @@ class Cracker(Thread):
 
             self._start_capture_threads()
             self._process.wait()
-            if not self._process.returncode == self.expected_returncode:
+            self.returncode = self._process.returncode
+            if not self.returncode == self.expected_returncode:
                 log.error("Process failed with return code %d: %s" %
                           (self._process.returncode,
                            self.output['stderr'] or self.output['stdout']))
+                self.passwords = None
             else:
                 log.debug("Process exited with return code 0: %s" %
                           self.output['stdout'])
-            self.passwords = self._get_passwords()
+                self.passwords = self._get_passwords()
         finally:
             try:
                 os.remove(self._potfile)
@@ -302,6 +304,7 @@ class John(Cracker):
         if not p.returncode == 0:
             log.error('Getting passwords failed with return code %d: %s'
                       % (p.returncode, err))
+            return None
         for line in output.splitlines():
             if line and ':' in line:
                 user, password = line.split(':')[:2]
