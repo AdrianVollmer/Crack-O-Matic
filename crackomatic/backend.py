@@ -276,7 +276,7 @@ class Backend(object):
                 (Audit.state == int(AuditState.FINISHED))
             ).order_by(Audit.end.desc()).all()
             if audits:
-                audit = audits[-1]
+                audit = audits[0]
                 duration = audit.end - audit.start
                 duration = format_timedelta(duration, format='short')
                 since = dt.now() - audit.end
