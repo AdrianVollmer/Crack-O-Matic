@@ -18,7 +18,7 @@ technique in attacks on Active Directory.
 Online Password Guessing Attacks
 --------------------------------
 
-In online password guessting attacks, you try to guess passwords against a
+In online password guessing attacks, you try to guess passwords against a
 live service. It may be your internal Kerberos service or a service that you
 expose to the internet, such as an Outlook Web Application, RDP or an SSH
 service. Now, these shouldn't be exposed to the internet without
@@ -61,8 +61,8 @@ NTLM Authentication Hashes
 
 A widespread authentication scheme in the Windows world is `NTLM
 <https://support.microsoft.com/en-us/help/102716/ntlm-user-authentication-in-windows>`_.
-It boils down to this: how can I prove to you, that I know a shared secret
-that we both have without actually saying the secret? With NTLM, it works
+It boils down to this: how can I prove to you that I know a shared secret
+that we both know without actually saying the secret? With NTLM, it works
 like this: You give me a unique string (that somehow depends on the time and
 your name) and ask me to digitally sign it. In this case, digitally signing
 it means encrypting it with the secret. You do the same and compare the
@@ -291,7 +291,7 @@ user sets the password. However, there are a few problems with it.
    issue on its own, but it does increase the attack surface.
 2. While the check may be case insensitive and consider common character
    replacements, it is no substitute for the vast rule sets that come with
-   state-of-the-art crackers. Some of those solution even only check against
+   state-of-the-art crackers. Some of those solutions even only check against
    a list of breached hashes, so they will not catch slight variations of
    breached hashes -- but hackers will.
 3. The filter may catch passwords that are perfectly fine. A user may choose
