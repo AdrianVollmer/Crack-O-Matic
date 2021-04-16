@@ -139,7 +139,7 @@ authentication_fields = [
     wtforms.StringField(
         "Search Base DN",
         description=dict(
-            id='binddn',
+            id='basedn',
             help="The base DN under which to perform the search",
             placeholder="CN=Users,DC=contoso,DC=local",
         ),
