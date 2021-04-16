@@ -33,15 +33,19 @@ class User(UserMixin):
         log.debug('Querying LDAP for authentication')
         url = auth_config['ldap_url']
         ca_file = auth_config['ca_file']
-        binddn = auth_config['binddn'] % username
         basedn = auth_config['basedn']
         search_filter = auth_config['filter']
         try:
+            # prevent ldap injection
+            # If someone has a weird username, too bad
+            assert not set(username).intersection(set('&%@,=()"\'')), \
+                    'username rejected'
+            binddn = auth_config['binddn'] % username
             result = ldap_query(url, basedn, ca_file, binddn, password,
                                 search_filter)
             return binddn in result
         except Exception as e:
-            log.error(str(e))
+            log.exception(e)
             return False
 
     def authenticate_local(username, password):
