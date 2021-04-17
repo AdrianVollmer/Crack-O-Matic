@@ -18,6 +18,11 @@ class User(UserMixin):
     logged_in_users = {}
 
     def authenticate(username, password, auth_config):
+        """Return a User() object if authentication succeeds
+
+        Username is assumed to be local first, if unsuccessful LDAP
+        authentication will be performed.
+        """
         authenticated = User.authenticate_local(username, password)
         if not authenticated and auth_config:
             authenticated = User.authenticate_ldap(
@@ -25,11 +30,16 @@ class User(UserMixin):
             )
         if authenticated:
             log.info("Successful authentication: %s" % username)
+            user = User()
+            user.id = username
+            User.logged_in_users[user.id] = user
+            return user
         else:
             log.error("Failed authentication: %s" % username)
-        return authenticated
+        return None
 
     def authenticate_ldap(username, password, auth_config):
+        """Return True iff LDAP authentication suceeds"""
         log.debug('Querying LDAP for authentication')
         url = auth_config['ldap_url']
         ca_file = auth_config['ca_file']
@@ -46,28 +56,25 @@ class User(UserMixin):
             return binddn in result
         except Exception as e:
             log.exception(e)
-            return False
+        return False
 
     def authenticate_local(username, password):
-        user = None
+        """Return True iff authentication against local DB suceeds"""
         with session_scope() as s:
             try:
                 user = s.query(LocalUser).filter(
                     LocalUser.username == username
                 ).one()
             except NoResultFound:
-                pass
-
+                user = None
             ph = PasswordHasher()
             if user:
                 if ph.verify(user.password, password):
-                    user = User()
-                    user.id = username
-                    User.logged_in_users[user.id] = user
-                    return user
+                    return True
             else:
                 # Prevent timing attacks
                 ph.hash('')
+        return False
 
     def create(username, password):
         ph = PasswordHasher()
