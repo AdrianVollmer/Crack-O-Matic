@@ -347,7 +347,7 @@ class Backend(object):
                     subtitle="Stage",
                 ),
             ]
-            if j.audit.state == AuditState.CRACKING:
+            if j.audit.state == AuditState.CRACKING and j.cracker:
                 status = j.cracker.get_status()
                 if not isinstance(status, dict):
                     status = {
