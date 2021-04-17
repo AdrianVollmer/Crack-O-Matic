@@ -43,13 +43,36 @@ Now you are ready to launch Crack-O-Matic with ``crackomatic web``.
 Configuration
 -------------
 
+Authentication
+~~~~~~~~~~~~~~
+
 After you log on with a local account, you can head to the "Config" section
-and set up simple LDAP authentication. This is optional.
+and set up `simple LDAP authentication
+<https://ldapwiki.com/wiki/Simple%20Authentication>`_. This is optional.
 
-The other configuration settings are not optional. You need to configure the
-cracker and the e-mail settings.
+If you want to able to login with an Active Directory account, you need to
+fill out the LDAP URL of a domain controller (use the FQDN), the local path
+to the corresponding root CA in PEM format, the bind DN (what the user
+object's distinguished name looks like), the search base DN (where to look
+in the directory) and an LDAP filter (who is authorized to log on). An
+example could be:
 
-For the cracker, you can choose between John and Hashcat.
+.. code-block::
+
+    LDAP URL = ldaps://dc1.contoso.local:636
+    CA File = /home/crackomatic/contoso-ca.pem
+    Bind DN = CN=%s,CN=Users,DC=contoso,DC=local
+    Base DN = CN=Users,DC=contoso,DC=local
+    LDAP Filter = (&(objectClass=user)(memberOf=CN=crackomatic_admins,OU=users,DC=contoso,DC=local))
+
+In the bind DN, ``%s`` will be replaced with the login ID of the user trying
+to authenticate in the web application.
+
+
+Cracker
+~~~~~~~
+
+For the cracker, you must choose between John and Hashcat.
 
 Crack-O-Matic does not come with a wordlist. You need to download a wordlist
 and specify a local path to that file in the "Cracker" section.
@@ -68,6 +91,12 @@ Depending on your hardware, you may want to choose a smaller wordlist or a
 smaller rule set if one audit does not finish within a week or so. However,
 computing NT hashes is cheap and they are unsalted, so we can usually afford
 the largest wordlists and rule sets there are.
+
+E-Mail
+~~~~~~
+
+This is required so the results can be sent out via e-mail. The fields
+should be self explanatory. If you use TLS, keep the CA in PEM format ready.
 
 
 Audits
