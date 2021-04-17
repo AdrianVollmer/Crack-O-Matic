@@ -196,9 +196,8 @@ Similarly, the system Crack-O-Matic is running on is as powerful as a domain
 controller. It, too, belongs in tier 0.
 
 Do not use the Crack-O-Matic service account for anything else. Choose a
-strong and unique password. Do not put this account into the group of domain
-administrators. Instead, give it only the permission of "Replicate Directory
-Changes All" to the domain in question and make it a Protected User.
+strong and unique password. Put this account into the group of domain
+administrators.
 
 If you want to harden the system even more, you could block all incoming
 connections except for SSH and HTTP and all outgoing connections except the
