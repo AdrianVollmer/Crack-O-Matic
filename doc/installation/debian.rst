@@ -18,7 +18,7 @@ is pulled from Pypi.
 .. code-block:: bash
 
     # Install python dependencies
-    sudo apt install python3-{pip,ldap,ldap3,flaskext.wtf,flask,flask-login,flask-migrate,gevent,sqlalchemy,matplotlib,wtforms,ldap,ldap3,argon2-cffi,babel,toml}
+    sudo apt install python3-{pip,ldap,ldap3,flaskext.wtf,flask,flask-login,flask-migrate,gevent,sqlalchemy,matplotlib,wtforms,ldap,ldap3,babel,toml,packaging,argon2}
 
     # Install samba
     sudo apt install samba

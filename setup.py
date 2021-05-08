@@ -35,6 +35,7 @@ setuptools.setup(
         'argon2-cffi',
         'babel>=2.6.0',
         'toml>=0.10.0',
+        'packaging>=19.0',
     ],
     python_requires='>=3.6',
     extras_require={
