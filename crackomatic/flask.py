@@ -141,7 +141,11 @@ def login():
 @app.route('/')
 @login_required
 def home():
-    status = backend.get_status()
+    try:
+        status = backend.get_status()
+    except Exception as e:
+        log.exception(e)
+        status = []
     return flask.render_template(
         'home.html',
         sections=status,

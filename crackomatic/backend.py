@@ -314,85 +314,104 @@ class Backend(object):
             ],
         )
 
-    def get_status(self):
-        if not self._job or self._job.audit.state in FINISHED_STATES:
-            next_audit = self.get_scheduled_audits()
-            if next_audit:
-                next_audit = next_audit[-1]
-                next_audit = next_audit.start - dt.now()
-                next_audit = format_timedelta(next_audit, format='short')
-            else:
-                next_audit = '∞'
-            tiles = [
-                dict(
-                    title="Ready",
-                    subtitle="State",
-                    color='success',
-                ),
-                dict(
-                    title=next_audit,
-                    subtitle="Time of next audit",
-                ),
-            ]
+    def _get_idle_status_tiles(self):
+        next_audit = self.get_scheduled_audits()
+        if next_audit:
+            next_audit = next_audit[-1]
+            next_audit = next_audit.start - dt.now()
+            next_audit = format_timedelta(next_audit, format='short')
         else:
-            j = self._job
-            tiles = [
-                dict(
-                    title="Running",
-                    subtitle="State",
-                    color='danger',
-                ),
-                dict(
-                    title=j.audit.state.name.replace('_', ' '),
-                    subtitle="Stage",
-                ),
-            ]
-            if j.audit.state == AuditState.CRACKING and j.cracker:
-                status = j.cracker.get_status()
-                if not isinstance(status, dict):
-                    status = {
-                        'guesses': 0,
-                        'ETA': '?',
-                        'progress': 0,
-                        'speed': 0,
-                    }
-                speed = status['speed']
-                if speed > 10**9:
-                    speed = "%.01fG" % (speed/10**9)
-                elif speed > 10**6:
-                    speed = "%.01fM" % (speed/10**6)
-                elif speed > 10**3:
-                    speed = "%.01fK" % (speed/10**3)
-                else:
-                    speed = str(speed)
-                started = dt.now() - j.audit.start
-                started = format_timedelta(started, format='short')
-                eta = status['ETA'] - dt.now()
-                eta = format_timedelta(eta, format='short')
+            next_audit = '∞'
+        tiles = [
+            dict(
+                title="Ready",
+                subtitle="State",
+                color='success',
+            ),
+            dict(
+                title=next_audit,
+                subtitle="Time of next audit",
+            ),
+        ]
+        return tiles
+
+    def _get_busy_status_tiles(self):
+        j = self._job
+        tiles = [
+            dict(
+                title="Running",
+                subtitle="State",
+                color='danger',
+            ),
+            dict(
+                title=j.audit.state.name.replace('_', ' '),
+                subtitle="Stage",
+            ),
+        ]
+        if j.audit.state == AuditState.CRACKING and j.cracker:
+            status = j.cracker.get_status()
+            if not isinstance(status, dict):
                 tiles += [
                     dict(
-                        title=speed,
-                        subtitle="Hashes/Second",
-                        rumble=True,
-                    ),
-                    dict(
-                        title=status['guesses'],
-                        subtitle="Successful guesses",
-                    ),
-                    dict(
-                        title='%d%%' % int(status['progress']),
-                        subtitle="Progress",
-                    ),
-                    dict(
-                        title=started,
-                        subtitle="Started",
-                    ),
-                    dict(
-                        title=eta,
-                        subtitle="ETA",
+                        title="Error",
+                        subtitle="Could not determine cracker status",
+                        color='danger',
                     ),
                 ]
+                return tiles
+            speed = status['speed']
+            if speed > 10**9:
+                speed = "%.01fG" % (speed/10**9)
+            elif speed > 10**6:
+                speed = "%.01fM" % (speed/10**6)
+            elif speed > 10**3:
+                speed = "%.01fK" % (speed/10**3)
+            else:
+                speed = str(speed)
+            started = dt.now() - j.audit.start
+            started = format_timedelta(started, format='short')
+            eta = status['ETA'] - dt.now()
+            eta = format_timedelta(eta, format='short')
+            tiles += [
+                dict(
+                    title=speed,
+                    subtitle="Hashes/Second",
+                    rumble=True,
+                ),
+                dict(
+                    title=status['guesses'],
+                    subtitle="Successful guesses",
+                ),
+                dict(
+                    title='%d%%' % int(status['progress']),
+                    subtitle="Progress",
+                ),
+                dict(
+                    title=started,
+                    subtitle="Started",
+                ),
+                dict(
+                    title=eta,
+                    subtitle="ETA",
+                ),
+            ]
+        return tiles
 
+    def get_status(self):
+        try:
+            if not self._job or self._job.audit.state in FINISHED_STATES:
+                tiles = self._get_idle_status_tiles()
+            else:
+                tiles = self._get_busy_status_tiles()
+        except Exception as e:
+            log.exception(e)
+            tiles += [
+                dict(
+                    title="Error",
+                    subtitle="Could not determine current status",
+                    color='danger',
+                ),
+            ]
         current = dict(
             title="Current",
             tiles=tiles,
