@@ -97,7 +97,7 @@ class NewAuditForm(FlaskForm):
     user_filter = StringField(
         "LDAP filter (notified users)",
         description=dict(
-            placeholder="(&amp;(objectClass=person)(objectClass=user)",
+            placeholder="(&amp;(objectClass=person)(objectClass=user))",
             help="Only users passing this LDAP filter will be notified if"
                  " their password was cracked",
         ),
@@ -108,7 +108,7 @@ class NewAuditForm(FlaskForm):
         description=dict(
             placeholder="(&amp;(objectClass=person)(objectClass=user)"
                         "(memberOf=cn=crackomaticAdmins,ou=users,"
-                        "dc=company,dc=com)",
+                        "dc=company,dc=com))",
             help="Only admin users passing this LDAP filter will receive"
                  " a report",
         ),
