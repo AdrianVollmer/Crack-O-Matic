@@ -65,6 +65,7 @@ def crack_long(cracker, global_data):
                 global_data['WORDLIST'],
                 '/usr/share/hashcat/rules/dive.rule',
                 global_data['HASHCAT_PATH'],
+                args=['--force'],
         )
     elif cracker == 'John':
         crack = John(

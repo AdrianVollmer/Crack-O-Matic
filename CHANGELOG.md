@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- Ability to pass custom command line arguments to cracker
+
 ### Fixed
 
 - Fix the dependencies `packaging` and `argon2` in docs and `setup.py`

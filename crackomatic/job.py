@@ -3,6 +3,7 @@ from threading import Thread
 from tempfile import TemporaryDirectory
 import os
 from datetime import datetime as dt
+import shlex
 
 from .smb import get_hashes
 from .cracker import get_cracker
@@ -85,6 +86,7 @@ class Job(Thread):
                 self.cracker_config['rule_path'],
                 self.cracker_config['binary_path'],
                 root_dir=self._root_dir.name,
+                args=shlex.split(self.cracker_config['additional_args']),
             )
             self.cracker.wait_until_finished()
             if self.cracker.passwords is None:
@@ -160,7 +162,6 @@ class Job(Thread):
             ) + '\n'.join(sorted(compromised_users))
         else:
             cracked_list = ""
-        print("URL: ", URL)
         url = ("%s/report?id=%s" % (URL, audit.uuid)) if URL else ''
         admin_msg = ADMIN_MSG % {
             "START": audit.start,

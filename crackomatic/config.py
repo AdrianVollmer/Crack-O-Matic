@@ -27,6 +27,14 @@ cracker_fields = [
         validators=[DataRequired("This field is required.")],
     ),
     wtforms.StringField(
+        "Additional Arguments",
+        description={
+            'help': "Additional command line arguments",
+            'placeholder': "",
+            'id': 'additional_args',
+        },
+    ),
+    wtforms.StringField(
         "Wordlist Path",
         description={
             'help': "Path to the wordlist (we recommend <a href='https://crackstation.net/crackstation-wordlist-password-cracking-dictionary.htm'>Crackstation's wordlist</a>)", # noqa
