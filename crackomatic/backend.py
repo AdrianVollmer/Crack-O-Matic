@@ -350,7 +350,15 @@ class Backend(object):
         ]
         if j.audit.state == AuditState.CRACKING and j.cracker:
             status = j.cracker.get_status()
-            if not isinstance(status, dict):
+            if isinstance(status, str):
+                tiles += [
+                    dict(
+                        title="Status",
+                        subtitle=status,
+                    ),
+                ]
+                return tiles
+            elif not isinstance(status, dict):
                 tiles += [
                     dict(
                         title="Error",
