@@ -86,7 +86,7 @@ class Job(Thread):
                 self.cracker_config['rule_path'],
                 self.cracker_config['binary_path'],
                 root_dir=self._root_dir.name,
-                args=shlex.split(self.cracker_config['additional_args']),
+                args=shlex.split(self.cracker_config.get('additional_args')),
             )
             self.cracker.wait_until_finished()
             if self.cracker.passwords is None:

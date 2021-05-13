@@ -1,7 +1,15 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+### Fixed
+
+- Fix bug with empty config setting "additional cracker arguments" after
+  upgrading from v0.1
+
+## [0.2] - 2021-05-10
 
 ### Added
 
