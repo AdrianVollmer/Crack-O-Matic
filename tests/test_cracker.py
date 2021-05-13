@@ -21,6 +21,7 @@ def crack(cracker, global_data):
                 global_data['WORDLIST'],
                 '/usr/share/hashcat/rules/best64.rule',
                 global_data['HASHCAT_PATH'],
+                args=['--force'],
         )
     elif cracker == 'John':
         crack = John(
@@ -43,6 +44,7 @@ def crack_short(cracker, global_data):
                 global_data['WORDLIST'],
                 '/usr/share/hashcat/rules/best64.rule',
                 global_data['HASHCAT_PATH'],
+                args=['--force'],
         )
     elif cracker == 'John':
         crack = John(
@@ -110,7 +112,9 @@ def test_cracker_status(crack_long):
     time.sleep(20)
     for i in range(5):
         time.sleep(10)
-        status.append(crack.get_status())
+        current_status = crack.get_status()
+        assert isinstance(current_status, dict)
+        status.append(current_status)
         if crack._process.returncode is not None:
             break
 
