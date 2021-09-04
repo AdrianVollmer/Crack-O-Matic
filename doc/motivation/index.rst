@@ -253,12 +253,16 @@ Still, there is basically no way around a password manager, and even then
 you probably need to remember a few passwords. Typically the one for the
 password manager itself, obviously, then the logon password to your
 computer, and possibly the password for the hard drive encryption (which
-everybody should have). Once at work, once at home.
+everybody should have). Once at work, once at home. This is assuming you use
+a single-instance password manager -- of course, if you use some cloud-based
+password manager on your mobile device that can be unlocked with biometric
+authentication you may be able to get this down to one or even zero
+passwords, depending on your level of paraonia.
 
-The good news is that these are passwords that you will use several times a
-day, every day. So even if they are random strings or words, you will
-quickly remember them. Maybe write them down for a day or two, but keep it
-in your wallet and then destroy the note securely.
+The good news is that these remaining passwords are passwords that you will
+use several times a day, every day. So even if they are random strings or
+words, you will quickly remember them. Maybe write them down for a day or
+two, but keep it in your wallet and then destroy the note securely.
 
 To boil it down:
 
